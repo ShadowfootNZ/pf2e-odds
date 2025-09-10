@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+
+# VS Code
+.vscode/
+.history/
+
+# Misc
+Thumbs.db
