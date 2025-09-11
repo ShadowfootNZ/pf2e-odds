@@ -138,7 +138,7 @@
         </div>
         <div class="row" style="margin-top:14px">
           <label for="needed">Successes needed</label>
-          <input id="needed" type="number" inputmode="numeric" min="1" max="10" step="1" value="3" />
+          <input id="needed" type="number" inputmode="numeric" min="1" max="20" step="1" value="3" />
         </div>
       </section>
       <section class="card span-2" aria-labelledby="summary-h">
@@ -210,8 +210,8 @@
         let smod = clamp(parseInt(els.skillMod.value || 0, 10), -20, 20);
         let needed = parseInt(els.needed.value || 1, 10);
 
-        if (!Number.isInteger(needed) || needed < 1 || needed > 10) {
-          needed = clamp(isNaN(needed) ? 1 : Math.round(needed), 1, 10);
+        if (!Number.isInteger(needed) || needed < 1 || needed > 20) {
+          needed = clamp(isNaN(needed) ? 1 : Math.round(needed), 1, 20);
           els.needed.value = needed;
         }
 
