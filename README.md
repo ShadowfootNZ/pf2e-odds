@@ -19,7 +19,7 @@ A single-page web app for calculating probabilities in **Pathfinder 2e** and **S
 
 ## Usage
 
-1. Open [`index.html`](index.html) in a modern browser.
+1. Open https://ShadowfootNZ.github.io/pf2e-odds/ in a modern browser.
 2. Enter **Task** and **Skill** values; set **Successes needed**.
 3. Results update when you tab out of a field.
 
