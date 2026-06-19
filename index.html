@@ -227,20 +227,20 @@
         let counts = { p2: 0, p1: 0, pf: 0, pc: 0 };
         for (let r = 1; r <= 20; r++) {
           const total = r + bonus;
-          let base;
-          if (total >= dc + 10) base = 2;          // crit success
-          else if (total >= dc) base = 1;          // success
-          else if (total <= dc - 10) base = -2;    // crit fail
-          else base = -1;                          // fail
+          // Use linear encoding 3=CritSuccess 2=Success 1=Fail 0=CritFail
+          // so ±1 adjustments cross the Success/Fail boundary correctly.
+          let deg;
+          if (total >= dc + 10) deg = 3;
+          else if (total >= dc)  deg = 2;
+          else if (total <= dc - 10) deg = 0;
+          else deg = 1;
 
-          // natural adjustments
-          let deg = base;
-          if (r === 20) deg = Math.min(2, base + 1);
-          if (r === 1)  deg = Math.max(-2, deg - 1);
+          if (r === 20) deg = Math.min(3, deg + 1);
+          if (r === 1)  deg = Math.max(0, deg - 1);
 
-          if (deg === 2) counts.p2++;
-          else if (deg === 1) counts.p1++;
-          else if (deg === -1) counts.pf++;
+          if (deg === 3) counts.p2++;
+          else if (deg === 2) counts.p1++;
+          else if (deg === 1) counts.pf++;
           else counts.pc++;
         }
         const toProb = x => x / 20;
@@ -348,5 +348,6 @@
       compute();
     });
   </script>
+  <script src="analytics.js"></script>
 </body>
 </html>
