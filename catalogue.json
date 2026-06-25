@@ -1,0 +1,10 @@
+{
+  "slug": "pf2e-odds",
+  "title": "PF2e / SF2e Odds Calculator",
+  "summary": "A standalone probability calculator for Pathfinder 2e and Starfinder 2e skill challenges.",
+  "description": "Calculate per-roll odds, expected rolls, and completion versus catastrophe for PF2e and SF2e skill challenges.",
+  "repoUrl": "https://github.com/ShadowfootNZ/pf2e-odds",
+  "appUrl": "https://apps.example.com/pf2e-odds/",
+  "deployDir": ".",
+  "entryPoint": "index.html"
+}
