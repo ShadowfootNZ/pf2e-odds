@@ -6,5 +6,6 @@
   "repoUrl": "https://github.com/ShadowfootNZ/pf2e-odds",
   "appUrl": "https://apps.shadowfoot.com/pf2e-odds/",
   "deployDir": ".",
-  "entryPoint": "index.html"
+  "entryPoint": "index.html",
+  "thumbnailPath": "docs/thumbnail.jpg"
 }

@@ -106,6 +106,7 @@ html[data-skin="sf"] .title-pf { display: none; }
   margin-bottom: 0;
 }
 .header-row h1 { font-size: 1.6rem; margin: 0; }
+.subtitle { font-size: .85rem; font-style: italic; color: var(--muted); margin: 2px 0 0; }
 h2 { font-size: 1.3rem; margin: 0 0 8px; }
 
 .skin-toggle {
@@ -246,6 +247,42 @@ input[type="number"]:focus { outline: 2px solid var(--focus); outline-offset: 2p
 }
 .bar .labelL { left: 10px; }
 .bar .labelR { right: 10px; }
+
+/* ===== Devil commentary ===== */
+.devil-quote {
+  font-style: italic;
+  color: var(--card-muted, var(--muted));
+  font-size: .9rem;
+  text-align: center;
+  margin: 10px 0 2px;
+  min-height: 1.3em;
+}
+.devil-attr {
+  font-size: .8rem;
+  color: var(--card-muted, var(--muted));
+  text-align: right;
+  margin: 0 0 12px;
+}
+
+/* ===== Character nameplate ===== */
+.nameplate {
+  text-align: center;
+  padding: 0 8px;
+}
+.nameplate-name {
+  display: block;
+  font-family: var(--font-heading, inherit);
+  font-size: 1rem;
+  color: var(--accent);
+  letter-spacing: .06em;
+}
+.nameplate-title {
+  display: block;
+  font-size: .75rem;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 3px;
+}
 
 /* ===== Footer ===== */
 .foot { color: var(--foot-color, var(--muted)); font-size: .85rem; margin-top: 12px; }

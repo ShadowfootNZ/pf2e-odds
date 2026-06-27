@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pathfinder Odds Calculator</title>
+  <title>Pathfinder Assessment Evaluator</title>
   <!-- Apply saved skin before first paint to avoid flash of wrong theme -->
   <script>(function(){var s=localStorage.getItem('pf2e-skin')||'pf';document.documentElement.dataset.skin=s;}());</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,10 +24,13 @@
   <div class="page">
     <div class="wrap">
       <div class="header-row">
-        <h1 id="app-title">
-          <span class="title-pf">Pathfinder Odds Calculator</span>
-          <span class="title-sf">Starfinder Odds Calculator</span>
-        </h1>
+        <div>
+          <h1 id="app-title">
+            <span class="title-pf">Pathfinder Assessment Evaluator</span>
+            <span class="title-sf">Starfinder Assessment Evaluator</span>
+          </h1>
+          <p class="subtitle">Assessments by Veliantrix</p>
+        </div>
         <div class="skin-toggle" role="group" aria-label="Game system">
           <button class="skin-btn active" data-skin="pf">PF2e</button>
           <button class="skin-btn"        data-skin="sf">SF2e</button>
@@ -79,9 +82,11 @@
               <div class="labelR" id="catLbl">Breach 0.0%</div>
             </div>
 
-            <h2 id="perroll-h">Assessment breakdown</h2>
+            <p class="devil-quote" id="devilQuote"></p>
+            <p class="devil-attr">— Veliantrix, Auditor</p>
+            <h2 id="perroll-h">Breakdown</h2>
             <div class="group">
-              <div class="pill"><span class="label">Odds per roll (any success)</span><span class="val" id="anyPct">0%</span></div>
+              <div class="pill"><span class="label">Any success</span><span class="val" id="anyPct">0%</span></div>
               <div class="pill"><span class="label">Critical Success</span><span class="val" id="p2Pct">0%</span></div>
               <div class="pill"><span class="label">Success</span><span class="val" id="p1Pct">0%</span></div>
               <div class="pill"><span class="label">Failure</span><span class="val" id="pfPct">0%</span></div>
@@ -90,18 +95,25 @@
           </section>
           <section class="foot">
             <p>
-              Notes: "Odds per roll" includes success and critical success. "Rolls projected" uses expected successes per roll (1×success + 2×critical success). "Fulfilment" is defined here as <em>1 − Breach</em> within N = ceil(projected rolls). The breach/success split before N is computed with a Markov process that includes 2e natural-1 and natural-20 degree shifts.
+              Notes: "Any success" includes success and critical success. "Rolls projected" uses expected successes per roll (1×success + 2×critical success). "Fulfilment" is defined here as <em>1 − Breach</em> within N = ceil(projected rolls). The breach/success split before N is computed with a Markov process that includes 2e natural-1 and natural-20 degree shifts.
             </p>
             <p>Found a bug or have a suggestion? <a href="https://github.com/ShadowfootNZ/pf2e-odds/issues" target="_blank" rel="noopener">Open an issue on GitHub</a>.</p>
-            <p><span class="title-pf">Pathfinder Odds Calculator</span><span class="title-sf">Starfinder Odds Calculator</span> uses trademarks and/or copyrights owned by Paizo Inc., used under <a href="https://paizo.com/licenses/communityuse" target="_blank" rel="noopener">Paizo's Community Use Policy</a>. We are expressly prohibited from charging you to use or access this content. <span class="title-pf">Pathfinder Odds Calculator</span><span class="title-sf">Starfinder Odds Calculator</span> is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc. and Paizo products, visit <a href="https://paizo.com" target="_blank" rel="noopener">paizo.com</a>.</p>
+            <p>The Auditor is Veliantrix, a phistophilus (contract devil) whose task is the impartial evaluation of risk. She neither wishes you success nor failure—only that the probabilities are accurately recorded.</p>
+            <p>My assessments draw upon trademarks and/or copyrights owned by Paizo Inc., used under <a href="https://paizo.com/licenses/communityuse" target="_blank" rel="noopener">Paizo's Community Use Policy</a>. I am expressly prohibited from charging you to use or access this content. <span class="title-pf">Pathfinder Assessment Evaluator</span><span class="title-sf">Starfinder Assessment Evaluator</span> is not published, endorsed, or specifically approved by Paizo Inc. For information about Paizo and their products, visit <a href="https://paizo.com" target="_blank" rel="noopener">paizo.com</a>.</p>
           </section>
       <!-- Character art — col 3, spans all rows -->
-      <div class="art" aria-hidden="true">
-        <img src="Devil_Phistophilus.webp" alt="" />
+      <div class="art">
+        <div class="nameplate">
+          <span class="nameplate-name">Veliantrix</span>
+          <span class="nameplate-title">Auditor · Phistophilus</span>
+        </div>
+        <img src="Devil_Phistophilus.webp" alt="Veliantrix, a phistophilus and Auditor of risk" />
+
       </div>
     </div>
   </div>
 
+  <script src="js/comments.js"></script>
   <script src="js/app.js"></script>
   <script src="js/analytics.js"></script>
 </body>

@@ -1,4 +1,4 @@
-# Pathfinder / Starfinder Odds Calculator
+# Pathfinder / Starfinder Assessment Evaluator
 
 A static web app for calculating skill-challenge probabilities in **Pathfinder 2e** and **Starfinder 2e**, including exact degree-of-success shifts for nat-1 and nat-20.
 
@@ -12,9 +12,9 @@ Enter a **Task DC**, optional modifiers, your **Skill** value, optional modifier
 
 Outputs:
 
-- **Expected rolls** to accumulate the required successes
-- **Fulfilment** vs **Catastrophe** probability within *ceil(expected rolls)*, computed via a Markov chain
-- **Per-roll odds** breakdown: Critical Success / Success / Failure / Critical Failure
+- **Rolls projected** to accumulate the required successes
+- **Fulfilment** vs **Breach** probability within *ceil(projected rolls)*, computed via a Markov chain
+- **Assessment breakdown**: Critical Success / Success / Failure / Critical Failure per roll
 - Nat-1 downgrade and nat-20 upgrade applied correctly per PF2e/SF2e rules
 
 ## License

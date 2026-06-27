@@ -3,7 +3,7 @@
   const html = document.documentElement;
   const buttons = document.querySelectorAll('.skin-btn');
 
-  const titles = { pf: 'Pathfinder Odds Calculator', sf: 'Starfinder Odds Calculator' };
+  const titles = { pf: 'Pathfinder Assessment Evaluator', sf: 'Starfinder Assessment Evaluator' };
 
   function applySkin(skin) {
     html.dataset.skin = skin;
@@ -49,7 +49,31 @@ document.addEventListener('DOMContentLoaded', () => {
     p1Pct:         document.getElementById('p1Pct'),
     pfPct:         document.getElementById('pfPct'),
     pcPct:         document.getElementById('pcPct'),
+    devilQuote:    document.getElementById('devilQuote'),
   };
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function getBand(ach) {
+    for (const b of DEVIL_COMMENTS.bands) {
+      if (ach >= b.min) return b.key;
+    }
+    return 'almostImpossible';
+  }
+
+  let _lastBandKey = null;
+  let _lastSkin    = null;
+
+  function updateDevilQuote(ach) {
+    const skin = document.documentElement.dataset.skin;
+    const key  = getBand(ach);
+    if (key === _lastBandKey && skin === _lastSkin) return;
+    _lastBandKey = key;
+    _lastSkin    = skin;
+    const grp  = DEVIL_COMMENTS.main[key];
+    const pool = [...grp.shared, ...(grp[skin] || [])];
+    els.devilQuote.textContent = pool.length ? pick(pool) : '';
+  }
 
   function setPill(el, prob) {
     el.textContent = pct0(prob);
@@ -176,10 +200,17 @@ document.addEventListener('DOMContentLoaded', () => {
     setPill(els.p1Pct,  pr.p1);
     setPill(els.pfPct,  pr.pf);
     setPill(els.pcPct,  pr.pc);
+
+    updateDevilQuote(ach);
   }
 
   ['taskDC', 'taskMod', 'skill', 'skillMod', 'needed'].forEach(id => {
     els[id].addEventListener('change', compute);
+  });
+
+  // Refresh quote immediately when skin toggles (skin IIFE handles the visual switch)
+  document.querySelectorAll('.skin-btn').forEach(b => {
+    b.addEventListener('click', () => { _lastSkin = null; compute(); });
   });
 
   compute();
