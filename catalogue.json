@@ -7,5 +7,9 @@
   "appUrl": "https://apps.shadowfoot.com/pf2e-odds/",
   "deployDir": ".",
   "entryPoint": "index.html",
-  "thumbnailPath": "docs/thumbnail.jpg"
+  "thumbnailPath": "docs/thumbnail.jpg",
+  "keyImagePath": "docs/Pathfinder-2e-Odds-Calculator.png",
+  "imagePaths": [
+    "docs/Starfinder-2e-Odds-Calculator.png"
+  ]
 }
