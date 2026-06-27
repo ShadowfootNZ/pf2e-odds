@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for considering contributing to the PF2e / SF2e Odds Calculator project!
+Thank you for considering contributing to the PF2e / SF2e Odds Calculator project. 
 
 ## How to contribute
 

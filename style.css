@@ -1,0 +1,253 @@
+/* ===== Fixed across both skins ===== */
+:root {
+  --ok: #2fbf71;
+  --danger: #e5484d;
+  --warning: #ffc857;
+}
+
+/* ===== PF2e skin — parchment cards on dark page ===== */
+html[data-skin="pf"] {
+  --bg:           #1e1208;
+  --panel:        #f0e6c8;
+  --border:       #8b6614;
+  --accent:       #c9a227;
+  --focus:        #7a3800;
+  --text:         #e8d4a0;
+  --muted:        #b89050;
+  --card-text:    #1a0a00;
+  --card-muted:   #6b4020;
+  --bar-bg:       #0e0800;
+  --input-bg:     #e8d8b0;
+  --pill-bg:      #e8d8b0;
+  --foot-color:   #b89050;
+  --font-body:    'EB Garamond', Georgia, serif;
+  --font-heading: 'Cinzel', 'Palatino Linotype', serif;
+  --pill-fill:    rgba(201, 162, 39, 0.32);
+}
+
+/* ===== SF2e skin — dark: cool blue-black / gunmetal / titanium / cyan / electric blue / white ===== */
+html[data-skin="sf"] {
+  --bg:           #080c14;
+  --panel:        #111822;
+  --border:       #2e4055;
+  --accent:       #00ccdd;
+  --focus:        #3388ff;
+  --text:         #f0f5ff;
+  --muted:        #607890;
+  --bar-bg:       #050810;
+  --input-bg:     #0a0f18;
+  --pill-bg:      #0c1422;
+  --foot-color:   #607890;
+  --font-body:    'Exo 2', 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Orbitron', 'Courier New', monospace;
+  --pill-fill:    rgba(0, 204, 221, 0.18);
+}
+
+/* ===== Base ===== */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.4;
+  transition: background .25s, color .25s;
+}
+
+h1, h2, h3 { font-family: var(--font-heading, inherit); }
+
+/* Skin-aware title — show only the matching span */
+html[data-skin="pf"] .title-sf { display: none; }
+html[data-skin="sf"] .title-pf { display: none; }
+
+/* ===== Page layout — calculator + art centred as a unit ===== */
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100%;
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 500px;
+  padding: 24px 16px;
+  flex: 0 1 500px;
+}
+
+/* Character art — grid col 3, hidden until viewport is wide enough */
+.art {
+  display: none;
+  pointer-events: none;
+}
+.art img {
+  display: block;
+  padding-top: 20px;
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  /* Dissolve the white image background into the dark page colour */
+  /* mix-blend-mode: multiply; */
+  /* Fade feet to fully transparent */
+  mask-image: linear-gradient(to bottom, black 5%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, black 5%, transparent 70%);
+}
+
+/* ===== Header row with skin toggle ===== */
+.header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.header-row h1 { font-size: 1.6rem; margin: 0; }
+h2 { font-size: 1.3rem; margin: 0 0 8px; }
+
+.skin-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.skin-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  transition: background .15s, color .15s;
+}
+.skin-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+}
+.skin-btn:hover:not(.active) {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* Two columns at medium viewports; wide cards span both */
+@media (min-width: 560px) {
+  .wrap       { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .header-row { grid-column: 1 / -1; }
+  .odds-card  { grid-column: 1 / -1; }
+  .foot       { grid-column: 1 / -1; }
+}
+
+/* At wide viewports: 3-column grid with named areas */
+@media (min-width: 860px) {
+  .wrap {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px;
+    grid-template-areas:
+      "header header header"
+      "skill  task   art"
+      "odds   odds   art"
+      "foot   foot   art";
+    max-width: 980px;
+    flex-basis: 980px;
+  }
+  .header-row { grid-area: header; }
+  .skill-card { grid-area: skill; }
+  .task-card  { grid-area: task; }
+  .odds-card  { grid-area: odds; }
+  .foot       { grid-area: foot; }
+  .art        { display: block; grid-area: art; align-self: start; overflow: hidden; }
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+  color: var(--card-text, var(--text));
+  transition: background .25s, border-color .25s, color .25s;
+  min-width: 0;
+}
+
+.card-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card-head .badge {
+  flex-shrink: 0;
+}
+
+
+/* ===== Rows & inputs ===== */
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; margin: 10px 0; }
+.badge {
+  background: var(--bar-bg); color: var(--text); border: 1px solid var(--border);
+  border-radius: 12px; padding: 8px 12px; width: 88px; box-sizing: border-box; text-align: center;
+  font-size: 1.6rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+.badge-red   { background: var(--danger); border-color: rgba(0,0,0,.25); }
+.badge-green { background: var(--ok);     border-color: rgba(0,0,0,.25); }
+
+label { color: var(--card-muted, var(--muted)); font-size: .95rem; min-width: 0; }
+input[type="number"] {
+  width: 6ch; padding: 10px 12px; font-size: 1rem;
+  color: var(--card-text, var(--text)); background: var(--input-bg);
+  border: 1px solid var(--border); border-radius: 10px;
+  transition: background .25s, border-color .25s;
+}
+input[type="number"]:focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ===== KPI & bar ===== */
+.kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+.kpi h3 { margin: 0 0 8px; font-weight: 600; font-size: .95rem; color: var(--card-muted, var(--muted)); }
+.kpi .val { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+
+.group { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+.pill {
+  background-color: var(--pill-bg);
+  background-image:
+    linear-gradient(
+      to right,
+      var(--pill-fill) var(--fill, 0%),
+      transparent var(--fill, 0%)
+    );
+  border: 1px solid var(--border);
+  border-radius: 999px; padding: 8px 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  transition: background-color .25s, border-color .25s;
+}
+.pill .label { color: var(--card-muted, var(--muted)); font-size: .9rem; }
+.pill .val { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.bar {
+  margin-top: 18px; margin-bottom: 18px;
+  background: var(--bar-bg); border: 1px solid var(--border);
+  border-radius: 999px; overflow: hidden; position: relative; height: 52px;
+}
+/* ok/danger intentionally NOT themed — stays red/green */
+.bar .ach { background: var(--ok);     height: 100%; width: 0%; transition: width .2s ease; }
+.bar .cat { background: var(--danger); height: 100%; width: 0%; position: absolute; right: 0; top: 0; transition: width .2s ease; }
+.bar .labelL, .bar .labelR {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-size: 1.15rem; font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 2px rgba(0,0,0,.5); pointer-events: none;
+}
+.bar .labelL { left: 10px; }
+.bar .labelR { right: 10px; }
+
+/* ===== Footer ===== */
+.foot { color: var(--foot-color, var(--muted)); font-size: .85rem; margin-top: 12px; }
+a { color: var(--accent); }
+a:hover { color: var(--focus); }

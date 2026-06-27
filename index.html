@@ -1,353 +1,108 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-skin="pf">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PF2e / SF2e Odds Calculator</title>
-  <style>
-    :root {
-      /* Accessible dark theme palette */
-      --bg: #0f1216;
-      --panel: #161a20;
-      --muted: #a7b0bf;
-      --text: #f2f5f9;
-      --accent: #7aa2ff;
-      --ok: #2fbf71;      /* achievement green */
-      --danger: #e5484d;  /* catastrophe red */
-      --warning: #ffc857;
-      --border: #2a3140;
-      --bar-bg: #0b0e12;
-      --focus: #8cb4ff;
-    }
-
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.4;
-    }
-
-    .wrap {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 24px 16px 24px;
-    }
-
-    h1 { font-size: 1.6rem; margin: 0 0 16px; }
-    h2 { font-size: 1.3rem; margin: 0 0 8px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    @media (min-width: 880px) {
-      /* Two columns on desktop */
-      .grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-    .span-2 { grid-column: 1 / -1; }
-    .row { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 10px; margin: 10px 0; }
-    .row-badge { grid-template-columns: 140px 1fr auto; }
-    .badge { 
-      background: #0b0e12; color: var(--text); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px 12px; min-width: 3rem; text-align: center;
-      font-size: 1.6rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums;
-      box-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-    .badge-red { background: var(--danger); border-color: rgba(0,0,0,.25); }
-    .badge-green { background: var(--ok); border-color: rgba(0,0,0,.25); }
-    label { color: var(--muted); font-size: .95rem; }
-    input[type="number"] {
-      width: 6ch; padding: 10px 12px; font-size: 1rem; color: var(--text);
-      background: #0d1117; border: 1px solid var(--border); border-radius: 10px;
-    }
-    input[type="number"]:focus { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-    .kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
-    .kpi h3 { margin: 0 0 8px; font-weight: 600; font-size: .95rem; color: var(--muted); }
-    .kpi .val { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
-
-    .group {
-      display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px;
-    }
-    .pill { background: #0b0e12; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .pill .label { color: var(--muted); font-size: .9rem; }
-    .pill .val { font-variant-numeric: tabular-nums; font-weight: 600; }
-
-    .bar {
-      margin-top: 18px; margin-bottom: 18px; background: var(--bar-bg); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; position: relative; height: 52px;
-    }
-    .bar .ach { background: var(--ok); height: 100%; width: 0%; transition: width .2s ease; }
-    .bar .cat { background: var(--danger); height: 100%; width: 0%; position: absolute; right: 0; top: 0; transition: width .2s ease; }
-    .bar .labelL, .bar .labelR {
-      position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.15rem; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,.5); pointer-events: none;
-    }
-    .bar .labelL { left: 10px; }
-    .bar .labelR { right: 10px; }
-
-    .foot { color: var(--muted); font-size: .85rem; margin-top: 12px; }
-
-  </style>
+  <title>Pathfinder Odds Calculator</title>
+  <!-- Apply saved skin before first paint to avoid flash of wrong theme -->
+  <script>(function(){var s=localStorage.getItem('pf2e-skin')||'pf';document.documentElement.dataset.skin=s;}());</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Exo+2:wght@400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
   <!--
     PF2e / SF2e Odds Calculator
     Licence: MIT (personal use; OK for GitHub)
     Notes:
       - Implements exact per-roll probabilities for PF2e/SF2e with nat-1 downgrade and nat-20 upgrade.
-      - Uses a small Markov chain to compute catastrophe-before-success within N rolls,
-        where N = ceil(Expected Rolls). Completion is reported as 1 - Catastrophe.
-      - Percentages shown per user rules: Completion & Catastrophe 1 dp; others whole %; Expected rolls 1 dp.
+      - Uses a small Markov chain to compute Breach-before-success within N rolls,
+        where N = ceil(Expected Rolls). Fulfilment is reported as 1 - Breach.
+      - Percentages shown per user rules: Fulfilment & Breach 1 dp; others whole %; Expected rolls 1 dp.
   -->
 </head>
 <body>
-  <div class="wrap">
-    <h1>PF2e / SF2e Odds Calculator</h1>
-    <div class="grid">
-      <section class="card" aria-labelledby="skill-h">
-        <h2 id="skill-h">Skill</h2>
-        <div class="row" style="margin-top:14px">
-          <label for="skill">Skill</label>
-          <input id="skill" type="number" inputmode="numeric" min="0" max="60" step="1" value="12" />
+  <div class="page">
+    <div class="wrap">
+      <div class="header-row">
+        <h1 id="app-title">
+          <span class="title-pf">Pathfinder Odds Calculator</span>
+          <span class="title-sf">Starfinder Odds Calculator</span>
+        </h1>
+        <div class="skin-toggle" role="group" aria-label="Game system">
+          <button class="skin-btn active" data-skin="pf">PF2e</button>
+          <button class="skin-btn"        data-skin="sf">SF2e</button>
         </div>
-        <div class="row row-badge">
-          <label for="skillMod">Skill modifiers</label>
-          <input id="skillMod" type="number" inputmode="numeric" min="-20" max="20" step="1" value="0" />
-          <div class="badge badge-green"><span id="sbOut">+12</span></div>
-        </div>
-      </section>
-      <section class="card" aria-labelledby="task-h">
-        <h2 id="task-h">Task</h2>
-        <div class="row">
-          <label for="taskDC">Task DC</label>
-          <input id="taskDC" type="number" inputmode="numeric" min="0" max="60" step="1" value="18" />
-        </div>
-        <div class="row row-badge">
-          <label for="taskMod">Task modifiers</label>
-          <input id="taskMod" type="number" inputmode="numeric" min="-20" max="20" step="1" value="0" />
-          <div class="badge badge-red"><span id="dcOut">18</span></div>
-        </div>
-        <div class="row" style="margin-top:14px">
-          <label for="needed">Successes needed</label>
-          <input id="needed" type="number" inputmode="numeric" min="1" max="20" step="1" value="3" />
-        </div>
-      </section>
-      <section class="card span-2" aria-labelledby="summary-h">
-        <h2 id="summary-h">Odds</h2>
-        <div class="kpi">
-          <h3>Rolls expected</h3>
-          <div class="val" id="expectedRolls">3.0</div>
-        </div>
+      </div>
+      <section class="card skill-card" aria-labelledby="skill-h">
+            <div class="card-head">
+              <h2 id="skill-h">Skill</h2>
+              <div class="badge badge-green"><span id="sbOut">+12</span></div>
+            </div>
+            <div class="row" style="margin-top:14px">
+              <label for="skill">Skill</label>
+              <input id="skill" type="number" inputmode="numeric" min="0" max="60" step="1" value="12" />
+            </div>
+            <div class="row">
+              <label for="skillMod">Skill modifiers</label>
+              <input id="skillMod" type="number" inputmode="numeric" min="-20" max="20" step="1" value="0" />
+            </div>
+          </section>
+          <section class="card task-card" aria-labelledby="task-h">
+            <div class="card-head">
+              <h2 id="task-h">Task</h2>
+              <div class="badge badge-red"><span id="dcOut">18</span></div>
+            </div>
+            <div class="row">
+              <label for="taskDC">Task DC</label>
+              <input id="taskDC" type="number" inputmode="numeric" min="0" max="60" step="1" value="18" />
+            </div>
+            <div class="row">
+              <label for="taskMod">Task modifiers</label>
+              <input id="taskMod" type="number" inputmode="numeric" min="-20" max="20" step="1" value="0" />
+            </div>
+            <div class="row" style="margin-top:14px">
+              <label for="needed">Successes needed</label>
+              <input id="needed" type="number" inputmode="numeric" min="1" max="20" step="1" value="3" />
+            </div>
+          </section>
+          <section class="card odds-card" aria-labelledby="summary-h">
+            <h2 id="summary-h">Assessment</h2>
+            <div class="kpi">
+              <h3>Rolls projected</h3>
+              <div class="val" id="expectedRolls">3.0</div>
+            </div>
 
-        <div class="bar" role="img" aria-label="Completion and catastrophe proportions">
-          <div class="ach" id="barAch"></div>
-          <div class="cat" id="barCat"></div>
-          <div class="labelL" id="achLbl">Completion 0.0%</div>
-          <div class="labelR" id="catLbl">Catastrophe 0.0%</div>
-        </div>
+            <div class="bar" role="img" aria-label="Fulfilment and Breach proportions">
+              <div class="ach" id="barAch"></div>
+              <div class="cat" id="barCat"></div>
+              <div class="labelL" id="achLbl">Fulfilment 0.0%</div>
+              <div class="labelR" id="catLbl">Breach 0.0%</div>
+            </div>
 
-        <h2 id="perroll-h">Per-roll odds</h2>
-        <div class="group">
-          <div class="pill"><span class="label">Odds per roll (any success)</span><span class="val" id="anyPct">0%</span></div>
-          <div class="pill"><span class="label">Critical Success</span><span class="val" id="p2Pct">0%</span></div>
-          <div class="pill"><span class="label">Success</span><span class="val" id="p1Pct">0%</span></div>
-          <div class="pill"><span class="label">Failure</span><span class="val" id="pfPct">0%</span></div>
-          <div class="pill"><span class="label">Critical Failure</span><span class="val" id="pcPct">0%</span></div>
-        </div>
-      </section>
-      <section class="span-2 foot">
-        <p>
-          Notes: “Odds per roll” includes success and critical success. “Rolls expected” uses expected successes per roll (1×success + 2×critical success). “Completion” is defined here as <em>1 − Catastrophe</em> within N = ceil(expected rolls). The catastrophe/success split before N is computed with a Markov process that includes PF2e/SF2e natural-1 and natural-20 degree shifts.
-        </p>
-      </section>
+            <h2 id="perroll-h">Assessment breakdown</h2>
+            <div class="group">
+              <div class="pill"><span class="label">Odds per roll (any success)</span><span class="val" id="anyPct">0%</span></div>
+              <div class="pill"><span class="label">Critical Success</span><span class="val" id="p2Pct">0%</span></div>
+              <div class="pill"><span class="label">Success</span><span class="val" id="p1Pct">0%</span></div>
+              <div class="pill"><span class="label">Failure</span><span class="val" id="pfPct">0%</span></div>
+              <div class="pill"><span class="label">Critical Failure</span><span class="val" id="pcPct">0%</span></div>
+            </div>
+          </section>
+          <section class="foot">
+            <p>
+              Notes: "Odds per roll" includes success and critical success. "Rolls projected" uses expected successes per roll (1×success + 2×critical success). "Fulfilment" is defined here as <em>1 − Breach</em> within N = ceil(projected rolls). The breach/success split before N is computed with a Markov process that includes 2e natural-1 and natural-20 degree shifts.
+            </p>
+            <p>Found a bug or have a suggestion? <a href="https://github.com/ShadowfootNZ/pf2e-odds/issues" target="_blank" rel="noopener">Open an issue on GitHub</a>.</p>
+            <p><span class="title-pf">Pathfinder Odds Calculator</span><span class="title-sf">Starfinder Odds Calculator</span> uses trademarks and/or copyrights owned by Paizo Inc., used under <a href="https://paizo.com/licenses/communityuse" target="_blank" rel="noopener">Paizo's Community Use Policy</a>. We are expressly prohibited from charging you to use or access this content. <span class="title-pf">Pathfinder Odds Calculator</span><span class="title-sf">Starfinder Odds Calculator</span> is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc. and Paizo products, visit <a href="https://paizo.com" target="_blank" rel="noopener">paizo.com</a>.</p>
+          </section>
+      <!-- Character art — col 3, spans all rows -->
+      <div class="art" aria-hidden="true">
+        <img src="Devil_Phistophilus.webp" alt="" />
+      </div>
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Utility formatters
-      const pct0 = x => `${Math.round(x * 100)}%`;
-      const pct1 = x => `${(x * 100).toFixed(1)}%`;
-      const round1 = x => Math.round(x * 10) / 10;
-
-      // Clamp helpers
-      const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-
-      // Elements
-      const els = {
-        taskDC: document.getElementById('taskDC'),
-        taskMod: document.getElementById('taskMod'),
-        dcOut: document.getElementById('dcOut'),
-        skill: document.getElementById('skill'),
-        skillMod: document.getElementById('skillMod'),
-        sbOut: document.getElementById('sbOut'),
-        needed: document.getElementById('needed'),
-        expectedRolls: document.getElementById('expectedRolls'),
-        barAch: document.getElementById('barAch'),
-        barCat: document.getElementById('barCat'),
-        achLbl: document.getElementById('achLbl'),
-        catLbl: document.getElementById('catLbl'),
-        anyPct: document.getElementById('anyPct'),
-        p2Pct: document.getElementById('p2Pct'),
-        p1Pct: document.getElementById('p1Pct'),
-        pfPct: document.getElementById('pfPct'),
-        pcPct: document.getElementById('pcPct'),
-      };
-
-      function validateAndCoerce() {
-        let tdc = clamp(parseInt(els.taskDC.value || 0, 10), 0, 60);
-        let tmod = clamp(parseInt(els.taskMod.value || 0, 10), -20, 20);
-        let skill = clamp(parseInt(els.skill.value || 0, 10), 0, 60);
-        let smod = clamp(parseInt(els.skillMod.value || 0, 10), -20, 20);
-        let needed = parseInt(els.needed.value || 1, 10);
-
-        if (!Number.isInteger(needed) || needed < 1 || needed > 20) {
-          needed = clamp(isNaN(needed) ? 1 : Math.round(needed), 1, 20);
-          els.needed.value = needed;
-        }
-
-        // Reflect clamped values
-        els.taskDC.value = tdc; els.taskMod.value = tmod;
-        els.skill.value = skill; els.skillMod.value = smod;
-
-        return { tdc, tmod, skill, smod, needed };
-      }
-
-      // Compute per-roll probabilities with PF2e nat-1/nat-20 rules
-      function perRoll(dc, bonus) {
-        let counts = { p2: 0, p1: 0, pf: 0, pc: 0 };
-        for (let r = 1; r <= 20; r++) {
-          const total = r + bonus;
-          // Use linear encoding 3=CritSuccess 2=Success 1=Fail 0=CritFail
-          // so ±1 adjustments cross the Success/Fail boundary correctly.
-          let deg;
-          if (total >= dc + 10) deg = 3;
-          else if (total >= dc)  deg = 2;
-          else if (total <= dc - 10) deg = 0;
-          else deg = 1;
-
-          if (r === 20) deg = Math.min(3, deg + 1);
-          if (r === 1)  deg = Math.max(0, deg - 1);
-
-          if (deg === 3) counts.p2++;
-          else if (deg === 2) counts.p1++;
-          else if (deg === 1) counts.pf++;
-          else counts.pc++;
-        }
-        const toProb = x => x / 20;
-        return { p2: toProb(counts.p2), p1: toProb(counts.p1), pf: toProb(counts.pf), pc: toProb(counts.pc) };
-      }
-
-      // Build transition matrix for S successes target
-      function buildT(S, p) {
-        // States: 0..S-1, SUCCESS=S, CATA=S+1
-        const dim = S + 2;
-        const SUCCESS = S, CATA = S + 1;
-        const T = Array.from({ length: dim }, () => Array(dim).fill(0));
-
-        // Absorbing rows
-        T[SUCCESS][SUCCESS] = 1;
-        T[CATA][CATA] = 1;
-
-        for (let k = 0; k <= S - 1; k++) {
-          // catastrophe
-          T[k][CATA] += p.pc;
-          // ordinary fail keeps you in place
-          T[k][k] += p.pf;
-          // +1 success
-          if (k === S - 1) {
-            T[k][SUCCESS] += p.p1;
-          } else {
-            T[k][k + 1] += p.p1;
-          }
-          // +2 success
-          if (k >= S - 2) {
-            T[k][SUCCESS] += p.p2;
-          } else {
-            T[k][k + 2] += p.p2;
-          }
-        }
-        return T;
-      }
-
-      function mmultVec(v, T) {
-        const out = Array(T.length).fill(0);
-        for (let j = 0; j < T.length; j++) {
-          let s = 0;
-          for (let i = 0; i < v.length; i++) s += v[i] * T[i][j];
-          out[j] = s;
-        }
-        return out;
-      }
-
-      function compute() {
-        const { tdc, tmod, skill, smod, needed } = validateAndCoerce();
-
-        const DC = tdc + tmod;
-        const SB = skill + smod;
-        els.dcOut.textContent = DC.toString();
-        els.sbOut.textContent = (SB >= 0 ? `+${SB}` : `${SB}`);
-
-        // Per-roll probabilities
-        const pr = perRoll(DC, SB);
-        const any = pr.p1 + pr.p2;
-
-        // Expected rolls (fractional, 1 dp); if no chance, show "No chance"
-        const gain = pr.p1 + 2 * pr.p2;
-        let expRollsDisplay = 'No chance';
-        let N = 0;
-        if (gain > 0) {
-          const exp = needed / gain;
-          expRollsDisplay = round1(exp).toFixed(1);
-          N = Math.ceil(exp);
-        }
-        els.expectedRolls.textContent = expRollsDisplay;
-
-        // Exact catastrophe/success within N via Markov (N=ceil(expected rolls))
-        let catWithinN = 1; // default when no chance to progress
-        if (N > 0) {
-          const T = buildT(needed, pr);
-          let v = Array(needed + 2).fill(0);
-          v[0] = 1; // start at 0 successes
-          const CATA = needed + 1;
-          for (let step = 0; step < N; step++) v = mmultVec(v, T);
-          catWithinN = v[CATA];
-        }
-
-        const ach = 1 - catWithinN; // per spec
-
-        // Update bar + labels
-        els.barAch.style.width = `${Math.max(0, Math.min(100, ach * 100))}%`;
-        els.barCat.style.width = `${Math.max(0, Math.min(100, catWithinN * 100))}%`;
-        els.achLbl.textContent = `Completion ${pct1(ach)}`;
-        els.catLbl.textContent = `Catastrophe ${pct1(catWithinN)}`;
-
-        // Per-roll pills (whole % except big two)
-        els.anyPct.textContent = pct0(any);
-        els.p2Pct.textContent = pct0(pr.p2);
-        els.p1Pct.textContent = pct0(pr.p1);
-        els.pfPct.textContent = pct0(pr.pf);
-        els.pcPct.textContent = pct0(pr.pc);
-      }
-
-      // Update “on exit from field” → use change events
-      ['taskDC','taskMod','skill','skillMod','needed'].forEach(id => {
-        els[id].addEventListener('change', compute);
-      });
-
-      // Initial compute
-      compute();
-    });
-  </script>
-  <script src="analytics.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/analytics.js"></script>
 </body>
 </html>
