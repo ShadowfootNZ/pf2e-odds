@@ -8,8 +8,8 @@
   "deployDir": ".",
   "entryPoint": "index.html",
   "thumbnailPath": "docs/thumbnail.jpg",
-  "keyImagePath": "docs/Pathfinder-2e-Odds-Calculator.png",
+  "keyImagePath": "docs/Pathfinder 2e Odds Calculator.png",
   "imagePaths": [
-    "docs/Starfinder-2e-Odds-Calculator.png"
+    "docs/Starfinder 2e Odds Calculator.png"
   ]
 }
