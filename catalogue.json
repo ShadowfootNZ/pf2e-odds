@@ -11,5 +11,7 @@
   "keyImagePath": "docs/Pathfinder 2e Odds Calculator.png",
   "imagePaths": [
     "docs/Starfinder 2e Odds Calculator.png"
-  ]
+  ],
+  "tags": ["pathfinder", "starfinder", "calculator"],
+  "status": "active"
 }
