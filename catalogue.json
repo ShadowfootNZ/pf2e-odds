@@ -8,9 +8,9 @@
   "deployDir": ".",
   "entryPoint": "index.html",
   "thumbnailPath": "docs/thumbnail.jpg",
-  "keyImagePath": "docs/Pathfinder 2e Odds Calculator.png",
+  "keyImagePath": "docs/Pathfinder Assessment Evaluator.jpg",
   "imagePaths": [
-    "docs/Starfinder 2e Odds Calculator.png"
+    "docs/Starfinder Assessment Evaluator.jpg"
   ],
   "tags": ["pathfinder", "starfinder", "calculator"],
   "status": "active"
