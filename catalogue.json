@@ -2,7 +2,7 @@
   "slug": "pf2e-odds",
   "title": "PF2e / SF2e Odds Calculator",
   "summary": "A probability calculator for Pathfinder 2e and Starfinder 2e skill challenges, with full degree-of-success maths.",
-  "description": "Enter a task DC, your skill modifier, and the successes needed, and see the full odds for a 2e skill challenge: the per-roll chance of each outcome (critical success, success, failure, critical failure) with natural 1 and natural 20 degree shifts applied per the rules, the projected number of rolls to finish with critical successes counting double, and the probability of fulfilling the challenge versus breaching within that window, computed via a Markov chain. Results update as you type, and a toggle switches between Pathfinder and Starfinder presentation.",
+  "description": "Enter a task DC, your skill modifier, and the successes needed, and see the full odds for a 2e skill challenge:\n\n- **Per-roll chances** of each outcome — critical success, success, failure, and critical failure — with natural 1 and natural 20 degree shifts applied per the rules.\n- **Projected rolls to finish**, with critical successes counting double.\n- **Probability of fulfilling the challenge** versus breaching within that window, computed via a Markov chain.\n\nResults update as you type, and a toggle switches between Pathfinder and Starfinder presentation.",
   "repoUrl": "https://github.com/ShadowfootNZ/pf2e-odds",
   "appUrl": "https://apps.shadowfoot.com/pf2e-odds/",
   "deployDir": ".",
